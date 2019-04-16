@@ -1,22 +1,26 @@
 const http = require("http");
-const crypto = require("crypto");
+
+const { shakeHands, parseMessage, composeMessage } = require("./sokidServer");
 
 http
   .createServer()
   .on("upgrade", (req, socket) => {
-    socket.write(
-      [
-        "HTTP/1.1 101 Switching Protocols",
-        "Upgrade: websocket",
-        "Connection: Upgrade",
-        `Sec-WebSocket-Accept: ${crypto
-          .createHash("sha1")
-          .update(
-            req.headers["sec-websocket-key"] +
-              "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
-          )
-          .digest("base64")}`
-      ].join("\r\n") + "\r\n\r\n"
-    );
+    socket
+      .on("data", message => {
+        console.log(parseMessage(message));
+
+        socket.write(
+          composeMessage({
+            ping: false,
+            payload: {
+              hey: "Wanna play ping pong?"
+            }
+          })
+        );
+      })
+      .on("end", () => {
+        console.log("end");
+      })
+      .write(shakeHands(req.headers["sec-websocket-key"]));
   })
   .listen(8080);

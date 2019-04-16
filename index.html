@@ -8,46 +8,30 @@
 </head>
 <body>
   <button>Ping</button>
+  <div id="message-box"></div>
+  <script src="./sokidClient/index.js"></script>
   <script>
-    function connect({
-      uri,
-      reconnectInterval, 
-    } = {
-      // default configuration
-      uri: 'ws://localhost:8080',
-      reconnectInterval: 10,
-    }) {
-      function makePayload(length) {
-        let keys = {}
-        for (let i = 65; i <= 90; ++i) {
-          keys[String.fromCharCode(i)] = i
-        }
-        return keys
-      }
-      
-      const Sokk = new WebSocket(uri)
-      
-      Sokk.onopen = () => {
-        console.log('Hands got shook')
-        Sokk.send(JSON.stringify(makePayload()).repeat(1))}
-      Sokk.onmessage = msg => {
-        console.log('Received: ' + msg.data)
-      }
-      Sokk.onclose = x => {
-        console.log('Socket is closing')
-        console.log('Trying to reconnect')
-        connect({uri})
-      }
-
-      return Sokk
-    }
-
     const Sokk = connect()
-
+    Sokk.onmessage = msg => {
+      console.log("Received: " + msg.data);
+      document.getElementById("message-box").innerText = JSON.parse(msg.data).msg
+    };
     document.getElementsByTagName('button')[0]
       .addEventListener('click', () => {
-        Sokk.send('Ping')
+        Sokk.emit('Ping')
       })
   </script>
+  <style>
+    body {
+      display: flex;
+    }
+    #message-box {
+      padding: .5rem;
+      margin-left: 1rem;
+      border: 1px solid green;
+      min-width: 10rem;
+      min-height: 1.2rem;
+    }
+  </style>
 </body>
 </html>

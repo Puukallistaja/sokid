@@ -4,10 +4,10 @@ const { composeMessage, parseMessage } = require("../sokidServer");
 
 const mock = {
   ping: false,
-  payload: "Lets play ping-pong"
+  payload: "Lets play ping-pong!"
 };
 
-const tooMuch = 10
+const tooMuch = 7
 const newMessage = composeMessage({ payload: mock.payload })
 const newMessageLarge = composeMessage({ payload: mock.payload.repeat(tooMuch) })
 

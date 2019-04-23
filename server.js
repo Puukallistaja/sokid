@@ -11,26 +11,28 @@ try {
       console.log("Establishing socket connection")
       socket
         .on("data", async message => {
-          console.log(message)
+          console.log('Icoming message')
           const messageParsed = parseMessage(message);
-          console.log(messageParsed.debug)
           
+          if (messageParsed.debug) {
+            console.log(messageParsed.debug)
+          } else {
+            console.log(messageParsed)
+            return
+          }
+          
+          const [a, b, c] = ["Hups", "Tups", "Lups"]
+            .map(duck => Buffer.from(crypto.createHash("sha256")
+                               .update(JSON.stringify(duck))
+                               .digest()))
+
           socket.write(composeMessage({
-            payload: {
-              "a": Buffer.from(messageParsed.a),
-              "b": Buffer.from(messageParsed.b),
-              "c": Buffer.from(crypto.createHash("sha256")
-                                     .update(JSON.stringify("1"))
-                                     .digest()),
-              "d":crypto.createHash("sha256")
-                      .update(JSON.stringify("1"))
-                      .digest('base64')
-            }
+            payload: { a, b, c, }
           }));
         })
         .on("end", (x) => {
           console.log("=======================================");
-          console.log("end");
+          console.log("Connection closed");
         })
         .write(shakeHands(req.headers["sec-websocket-key"]));
     })

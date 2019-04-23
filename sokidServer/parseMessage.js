@@ -1,4 +1,4 @@
-const debug = true;
+const debug = 0;
 
 module.exports = buffer => {
   function readPayloadInfo() {
@@ -58,6 +58,11 @@ module.exports = buffer => {
   try {
     const isFinalFrame = Boolean(buffer[0] & 0x80);
     const opCode = buffer[0] & 0xf;
+
+    if (opCode === 8) {
+      return JSON.stringify({ msg: "Connection closed" })
+    }
+
     const {
       isMasked,
       maskingKey,
@@ -73,8 +78,8 @@ module.exports = buffer => {
       buffer.map((byte, ix) => {
         if (ix > 11) return;
         console.log(
-          `${ix < 9 ? "0" + (ix + 1) : ++ix} ${
-            ix < 9 ? "0" + ix : ix
+          `${ix < 9 ? "0" + (ix +  1) : ++ix} ${
+             ix < 9 ? "0" +  ix : ix
           } ${byte.toString(2).padStart(8, "0")} :: ${byte}`
         );
       });
@@ -91,7 +96,16 @@ module.exports = buffer => {
       }
     }
 
-    return payload.toString();
+    return {
+       a : payload.slice( 0, 32),
+       b : payload.slice(32, 64),
+       c : payload.slice(64, 96),
+       debug: {
+         "a": payload.slice( 0, 32).toString('base64'),
+         "b": payload.slice(32, 64).toString('base64'),
+         "c": payload.slice(64, 96).toString('base64'),
+       }
+    };
   } catch (error) {
     console.log(error);
   }

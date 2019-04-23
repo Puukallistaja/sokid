@@ -1,20 +1,26 @@
 // all frames are FIN
 const opCodes = {
-  ping: 0b10001001,
-  text: 0b10000001,
-  close: 0b10001000
+  text:   0b10000001,
+  binary: 0b10000010,
+  ping:   0b10001001,
+  close:  0b10001000
 };
 
-module.exports = ({payload, ping}) => {
-  const payLoadAsJson = JSON.stringify(payload);
-  const buffer = Buffer.alloc(2 + Buffer.byteLength(payLoadAsJson));
+const PAYLOAD_LENGTH_BYTES = 1
 
-  const firstByte = () => ping ? opCodes.ping : opCodes.text;
-  const secondByte = () => Buffer.byteLength(payLoadAsJson)
-  
+module.exports = ({payload, ping}) => {
+  const body = Buffer.concat([payload.a, payload.b, payload.c])
+  console.log("payload body length: " + body.length)
+  const buffer = Buffer.alloc(2 + Buffer.byteLength(body));
+
+  const firstByte = () => ping ? opCodes.ping : opCodes.binary;
+  const secondByte = () => Buffer.byteLength(body)
+
+  console.log(payload.a.toString('base64'))
+  console.log(payload.d)
+
   buffer.writeUInt8(firstByte(), 0);
   buffer.writeUInt8(secondByte(), 1);
-  buffer.write(payLoadAsJson, 2);
 
-  return buffer;
+  return Buffer.concat([buffer.slice(0, 2), body]);
 };

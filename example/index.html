@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sokid</title>
+</head>
+<body>
+  <article>
+    <button id="a">-</button>
+    <button id="B">+</button>
+  </article>
+  <!-- <script src="./client.js"></script> -->
+  <script src="../sokidClient/index.js"></script>
+  <script>
+    const socket = sokk()
+    socket.connect()
+
+    Array.from(document.querySelectorAll("button"))
+      .map(btn => {
+        btn.addEventListener('click', event => {
+          socket.send(['payload', 'in', 'pieces'])
+        })
+      })
+  </script>
+</body>
+</html>

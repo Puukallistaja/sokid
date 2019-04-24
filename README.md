@@ -6,7 +6,7 @@ Duplex JSON messaging system for max 125 bytes
 
 #### Requirements
 ##### Server
-Node.js v10+
+Node.js v11+
 ##### Client
 Chromium v73+
 

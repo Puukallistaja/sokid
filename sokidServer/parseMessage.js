@@ -97,14 +97,16 @@ module.exports = buffer => {
     }
 
     return {
-       a : payload.slice( 0, 32),
-       b : payload.slice(32, 64),
-       c : payload.slice(64, 96),
-       debug: {
-         "a": payload.slice( 0, 32).toString('base64'),
-         "b": payload.slice(32, 64).toString('base64'),
-         "c": payload.slice(64, 96).toString('base64'),
-       }
+      h : payload.slice( 0,  29),
+      a : payload.slice(29,  61),
+      b : payload.slice(61,  93),
+      c : payload.slice(93, 125),
+      debug: {
+        "h": payload.slice( 0,  29).toString('base64'),
+        "a": payload.slice(29,  61).toString('base64'),
+        "b": payload.slice(61,  93).toString('base64'),
+        "c": payload.slice(93, 125).toString('base64'),
+      }
     };
   } catch (error) {
     console.log(error);

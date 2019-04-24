@@ -11,7 +11,6 @@ function sokk(config = {
     console.log(message)
     if (config.reconnect) {
       const reconnect = () => {
-        let reconnectInterval = config.reconnectInterval
         setTimeout(() => {
           reconnectInterval = reconnectInterval * 2;
           link = connect(uri)
@@ -67,6 +66,7 @@ function sokk(config = {
       socket.onclose = config.onClose
     },
     async send(message) {
+      console.log(socket)
       try {
         socket.send(
           composePayload(await Promise.all(

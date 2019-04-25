@@ -37,14 +37,13 @@ function sokk({
   }
   
   function connectSocket() {
-    const socket = new WebSocket(uri)
-    socket.binaryType = "arraybuffer"
-
-    return socket
+    const  sokk = new WebSocket(uri)
+           sokk.binaryType = "arraybuffer"
+    return sokk
   }
 
-  function addEventHandlersToSocket(socket) {
-    socket.onopen = (openEvent) => {
+  function addEventHandlersToSocket(sokk) {
+    sokk.onopen = (openEvent) => {
       if (debug) {
         console.log("Socket connected.")
         console.log(openEvent)
@@ -56,7 +55,7 @@ function sokk({
       }
     }
   
-    socket.onclose = (closeEvent) => {
+    sokk.onclose = (closeEvent) => {
       if (debug) {
         console.log("Socket closing.")
         console.log(closeEvent)
@@ -82,7 +81,7 @@ function sokk({
       }
     }
   
-    socket.onmessage = message => {
+    sokk.onmessage = message => {
       if (debug) {
         console.log('Socket received a message.')
         console.log(message)
@@ -93,7 +92,7 @@ function sokk({
       }
     }
   
-    socket.onerror = error => {
+    sokk.onerror = error => {
       if (debug) {
         console.log('Socket received an error.')
         console.log(error)
@@ -104,7 +103,7 @@ function sokk({
       }
     }
 
-    return socket
+    return sokk
   }
 
   // dataflows

@@ -3,9 +3,9 @@ function sokk({
   debug = false,
   reconnect = true,
   reconnectInterval = 2,
-  onError = (error) => {},
-  onOpen = (openEvent) => {},
-  onClose = (closeEvent) => {},
+  onError   = (error) => {},
+  onOpen    = (openEvent) => {},
+  onClose   = (closeEvent) => {},
   onMessage = (incomingMessage) => {},
 }) {
 
@@ -37,7 +37,7 @@ function sokk({
   }
   
   function connectSocket() {
-    const  sokk = new WebSocket(uri)
+     const sokk = new WebSocket(uri)
            sokk.binaryType = "arraybuffer"
     return sokk
   }
@@ -49,12 +49,10 @@ function sokk({
         console.log(openEvent)
       }
       reconnectInterval = 2
-  
       if (typeof onOpen === 'function') {
         onOpen(openEvent)
       }
     }
-  
     sokk.onclose = (closeEvent) => {
       if (debug) {
         console.log("Socket closing.")
@@ -80,18 +78,29 @@ function sokk({
         onClose(closeEvent)
       }
     }
-  
     sokk.onmessage = message => {
       if (debug) {
         console.log('Socket received a message.')
         console.log(message)
       }
-  
+      const payload = new Uint8Array(message.data)
+
+      const first  = btoa(String.fromCharCode(...payload.slice( 0, 32)))
+      const second = btoa(String.fromCharCode(...payload.slice(32, 64)))
+      const third  = btoa(String.fromCharCode(...payload.slice(64, 96)))
+
+      console.log(`Incoming message
+        ============================================
+        ${first}
+        ${second}
+        ${third}
+        ============================================
+      `)
+
       if (typeof onMessage === 'function') {
         onMessage(message)
       }
     }
-  
     sokk.onerror = error => {
       if (debug) {
         console.log('Socket received an error.')
@@ -122,6 +131,7 @@ function sokk({
   return {
     async send(message) {
       try {
+        console.log(socket)
         socket.send(
           composePayload(await Promise.all(
             normalizeMessage(message).map(x =>

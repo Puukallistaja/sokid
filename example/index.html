@@ -17,12 +17,9 @@
   <script src="../sokidClient/index.js"></script>
   <script>
     const socket = sokk({
-      debug: true,
+      debug: false,
       onMessage: (msg) => {
-        console.log(`Incoming message
-        =====================================
-          ${msg.data}
-        `)
+        console.log(msg.data)
       }
     })
 

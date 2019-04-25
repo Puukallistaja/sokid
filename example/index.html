@@ -8,21 +8,53 @@
 </head>
 <body>
   <article>
-    <button id="a">-</button>
-    <button id="B">+</button>
+    <input type="text" placeholder="Message part 1" value="Hups">
+    <input type="text" placeholder="Message part 2" value="Tups">
+    <input type="text" placeholder="Message part 3" value="Lups">
+    <button id="a">Send</button>
   </article>
   <!-- <script src="./client.js"></script> -->
   <script src="../sokidClient/index.js"></script>
   <script>
-    const socket = sokk()
-    socket.connect()
+    const socket = sokk({
+      debug: true,
+      onMessage: (msg) => {
+        console.log(`Incoming message
+        =====================================
+          ${msg.data}
+        `)
+      }
+    })
 
     Array.from(document.querySelectorAll("button"))
       .map(btn => {
         btn.addEventListener('click', event => {
-          socket.send(['payload', 'in', 'pieces'])
+          socket.send(
+            Array.from(document.querySelectorAll("input"))
+              .map(input => input.value)
+          )
         })
       })
   </script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+    }
+    article {
+      flex: 1 1 auto;
+      max-width: 20rem;
+      display: flex;
+      flex-flow: column;
+    }
+    input {
+      margin: 0.25rem 1rem;
+      padding: 0.25rem;
+    }
+    button {
+      margin: 1rem;
+      padding: 0.25rem;
+    }
+  </style>
 </body>
 </html>

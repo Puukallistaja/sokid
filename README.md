@@ -3,9 +3,12 @@ NodeJS websockets implementation. No dependencies.
 Duplex binary messaging system for payloads up to 125 bytes.
 
 #### Protocol
-header 29 bytes
-
-payload 96 bytes (3x SHA-256 binary)
+```
+header   29 bytes
+body     96 bytes (3x SHA-256 binary)
+-----------------
+payload 125 bytes
+```
 
 #### Requirements
 * Server **Node.js v11**
@@ -18,20 +21,25 @@ clone&go
 
 #### Run
 * server: ```node server.js```
-* client: just append the script to HTML (see example)
+* client: append the script to HTML (see example)
 ```
 const socket = sokk({
-  uri: 'ws://localhost:8080',
-  debug: true,
-  reconnect: true,
-  reconnectInterval: 2,
-  onError(error) {},
-  onOpen(openEvent) {},
-  onClose(closeEvent) {},
-  onMessage(incomingMessage) {},
+
+  // config
+  uri               : 'ws://localhost:8080',
+  debug             : false,
+  reconnect         : true,
+  reconnectInterval : 2,
+  
+  // event handlers
+  onError   : (error) => {},
+  onOpen    : (openEvent) => {},
+  onClose   : (closeEvent) => {},
+  onMessage : (incomingMessage) => {},
+
 })
-socket.connect()
 ```
 
 #### Tests
-Aint nobody got time fo that
+![Aint nobody got time for that](https://i.ytimg.com/vi/Nh7UgAprdpM/hqdefault.jpg "Aint nobody got time for that")
+

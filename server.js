@@ -1,5 +1,4 @@
 const http = require("http");
-const util = require('util')
 const crypto = require("crypto")
 
 const { shakeHands, parseMessage, composeMessage } = require("./sokidServer");
